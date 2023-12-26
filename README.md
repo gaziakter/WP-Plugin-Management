@@ -1,1 +1,1 @@
-# WP-Plugin-Management
+# Plugin Assets Management
