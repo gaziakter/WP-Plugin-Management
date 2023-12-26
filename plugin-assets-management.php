@@ -24,7 +24,17 @@
  define( 'ASN_VERSION', time() );
 
  class AssetsNinja {
+	function __construct() {
 
+		$this->version = time();
+
+		add_action( 'init',array($this,'asn_init' ) );
+	}
+
+    function asn_init(){
+		wp_deregister_style('fontawesome-css');
+		wp_register_style('fontawesome-css','//use.fontawesome.com/releases/v5.2.0/css/all.css');
+	}
     
 }
 
