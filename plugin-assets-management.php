@@ -30,6 +30,7 @@
 
 		add_action( 'init',array($this,'asn_init' ) );
         add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) );
+        add_action( 'wp_enqueue_scripts', array( $this, 'load_front_assets' ) );
 
 	}
 
@@ -40,6 +41,50 @@
 
     function load_textdomain() {
 		load_plugin_textdomain( 'plugin-assets', false, plugin_dir_url( __FILE__ ) . "/languages" );
+	}
+
+    function load_front_assets() {
+		wp_enqueue_style( 'asn-main-css', ASN_ASSETS_PUBLIC_DIR . "/css/main.css", null, $this->version );
+
+		/*wp_enqueue_script( 'asn-main-js', ASN_ASSETS_PUBLIC_DIR . "/js/main.js", array(
+			'jquery',
+			'asn-another-js'
+		), $this->version, true );
+
+		wp_enqueue_script( 'asn-another-js', ASN_ASSETS_PUBLIC_DIR . "/js/another.js", array(
+			'jquery',
+			'asn-more-js'
+		), $this->version, true );
+
+		wp_enqueue_script( 'asn-more-js', ASN_ASSETS_PUBLIC_DIR . "/js/more.js", array( 'jquery' ), $this->version, true );*/
+
+		$js_files = array(
+			'asn-main-js'=>array('path'=>ASN_ASSETS_PUBLIC_DIR . "/js/main.js",'dep'=>array('jquery','asn-another-js')),
+			'asn-another-js'=>array('path'=>ASN_ASSETS_PUBLIC_DIR . "/js/another.js",'dep'=>array('jquery','asn-more-js')),
+			'asn-more-js'=>array('path'=>ASN_ASSETS_PUBLIC_DIR . "/js/more.js",'dep'=>array('jquery')),
+		);
+		foreach($js_files as $handle=>$fileinfo){
+			wp_enqueue_script($handle,$fileinfo['path'],$fileinfo['dep'],$this->version,true);
+		}
+
+
+		$data     = array(
+			'name' => 'Gazi Akter',
+			'url'  => 'https:/gaziakter.com/'
+		);
+		$moredata = array(
+			'name' => 'Gazi Akter',
+			'url'  => 'https:/gaziakter.com/'
+		);
+
+		$translated_strings = array(
+			'greetings' => __( 'Hello World', 'plugin-assets' )
+		);
+
+		wp_localize_script( 'asn-more-js', 'sitedata', $data );
+		wp_localize_script( 'asn-more-js', 'moredata', $moredata );
+		wp_localize_script( 'asn-more-js', 'translations', $translated_strings );
+
 	}
     
 }
