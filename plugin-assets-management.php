@@ -29,11 +29,17 @@
 		$this->version = time();
 
 		add_action( 'init',array($this,'asn_init' ) );
+        add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) );
+
 	}
 
     function asn_init(){
 		wp_deregister_style('fontawesome-css');
 		wp_register_style('fontawesome-css','//use.fontawesome.com/releases/v5.2.0/css/all.css');
+	}
+
+    function load_textdomain() {
+		load_plugin_textdomain( 'plugin-assets', false, plugin_dir_url( __FILE__ ) . "/languages" );
 	}
     
 }
